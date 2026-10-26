@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#007f73">
+<title>Service Feedback · Portrait Prototype</title>
+<style>
+:root{--teal:#007f73;--teal-dark:#005e57;--teal-pale:#e4f5f2;--ink:#15272d;--muted:#64777d;--line:#d7e3e4;--page:#eef1f6;--surface:#ffffff;--lilac:#ebeaf3;--amber:#946200;--amber-pale:#fff3d4;--green:#137647;--green-pale:#e8f7ed;--red:#b63232;--red-pale:#fff0ef;--focus:#2380dc}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;font-family:Inter,Arial,"Noto Sans",sans-serif;background:var(--page);color:var(--ink)}
+body{overflow:hidden}
+button,textarea{font:inherit}
+button{cursor:pointer}
+button:focus-visible,textarea:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+#app{width:100%;height:100dvh}
+.shell{width:100%;max-width:480px;height:100%;margin:0 auto;background:var(--surface);display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:calc(58px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 14px 0;flex:0 0 auto;background:#a8ddda;display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;border-bottom:1px solid #95cbc8}
+.iconButton{width:40px;height:40px;border:0;border-radius:8px;background:transparent;color:var(--ink);font-size:28px;line-height:1;display:grid;place-items:center}
+.iconButton:hover{background:#ffffff80}
+.brandMark{width:40px;height:40px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font-size:18px;font-weight:850}
+.appName{min-width:0;text-align:center}
+.appKicker{font-size:10px;font-weight:800;color:var(--teal-dark);line-height:1.2}
+.appTitle{font-size:16px;font-weight:850;line-height:1.2;margin-top:2px}
+.scrollArea{min-height:0;flex:1;overflow-y:auto;overscroll-behavior:contain;background:var(--page)}
+.page{padding:16px 14px 20px;min-height:100%}
+.intro{padding:2px 2px 14px}
+.eyebrow{font-size:10px;font-weight:800;color:var(--teal);line-height:1.2}
+h1{font-size:24px;line-height:1.15;margin:6px 0 5px}
+.subtext{font-size:13px;line-height:1.45;color:var(--muted);margin:0}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
+.stat{min-height:66px;border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:11px 12px;display:flex;align-items:center;gap:9px}
+.statNumber{font-size:25px;font-weight:850;line-height:1;color:var(--teal)}
+.statLabel{font-size:11px;line-height:1.25;color:var(--muted)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:8px;background:#ddeaea}
+.tab{min-height:40px;border:0;border-radius:6px;background:transparent;color:#55706f;font-size:13px;font-weight:800}
+.tab.active{background:var(--surface);color:var(--teal);box-shadow:0 1px 3px #193a3a1f}
+.listHead{display:flex;justify-content:space-between;align-items:center;padding:16px 2px 8px;gap:12px}
+.listHead strong{font-size:15px}
+.listHead span{font-size:11px;color:var(--muted);white-space:nowrap}
+.taskList{display:grid;gap:9px}
+.task{border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:13px;min-height:148px;display:flex;flex-direction:column;gap:11px}
+.taskTop{display:flex;align-items:center;gap:10px;min-width:0}
+.avatar{width:40px;height:40px;border-radius:50%;background:#d9eeea;border:1px solid #c6e0dc;display:grid;place-items:center;font-size:20px;flex:0 0 auto}
+.taskMeta{min-width:0;flex:1}
+.taskName{font-size:14px;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.taskDate{font-size:10px;color:var(--muted);margin-top:3px}
+.status{font-size:10px;font-weight:800;border-radius:6px;padding:5px 7px;white-space:nowrap}
+.status.pending{color:var(--amber);background:var(--amber-pale)}
+.status.positive{color:var(--green);background:var(--green-pale)}
+.status.okay{color:#865e00;background:#fff3d6}
+.status.negative{color:var(--red);background:var(--red-pale)}
+.chips{display:flex;gap:5px;flex-wrap:wrap}
+.chip{font-size:10px;line-height:1.2;color:#45605f;background:#edf4f3;border-radius:5px;padding:5px 7px}
+.taskBottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto}
+.due{font-size:11px;color:var(--amber)}
+.due.done{color:var(--muted)}
+.primary,.secondary{min-height:42px;border-radius:7px;padding:0 15px;font-size:13px;font-weight:850;white-space:nowrap}
+.primary{border:1px solid var(--teal-dark);background:var(--teal);color:#fff}
+.primary:hover{background:var(--teal-dark)}
+.secondary{border:1px solid var(--line);background:var(--surface);color:#355755}
+.empty{min-height:190px;display:grid;place-items:center;text-align:center;border:1px dashed #bfd0d1;border-radius:8px;background:#f9fcfc;color:var(--muted);padding:24px;font-size:13px;line-height:1.5}
+.policy{font-size:11px;line-height:1.45;color:var(--muted);padding:15px 2px 4px}
+.detailPage{padding:14px 14px 8px}
+.backRow{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.backRow .iconButton{width:36px;height:36px;border:1px solid var(--line);background:var(--surface);font-size:24px}
+.backRow strong{font-size:15px}
+.agentBlock{display:flex;align-items:center;gap:11px;border-bottom:1px solid var(--line);padding:0 0 13px}
+.agentName{font-size:15px;font-weight:850}
+.agentDetail{font-size:11px;color:var(--muted);line-height:1.4;margin-top:3px}
+.formIntro{padding:17px 0 11px}
+.formIntro h1{font-size:22px;margin:0 0 5px}
+.sentiments{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 16px}
+.sentiment{min-height:104px;border:2px solid var(--line);border-radius:8px;background:var(--surface);padding:8px 5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--ink)}
+.sentiment .face{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-size:21px}
+.sentiment strong{font-size:12px}
+.sentiment span{font-size:10px;color:var(--muted)}
+.sentiment.negative .face{background:#ffe3e0}
+.sentiment.okay .face{background:#fff0c8}
+.sentiment.positive .face{background:#daf3e2}
+.sentiment.selected.negative{border-color:var(--red);background:#fff8f7}
+.sentiment.selected.okay{border-color:#c78a00;background:#fffdf4}
+.sentiment.selected.positive{border-color:var(--green);background:#f6fff8}
+.section{border-top:1px solid var(--line);padding:14px 0}
+.sectionTitle{font-size:13px;font-weight:850;margin:0 0 4px}
+.sectionHelp{font-size:11px;color:var(--muted);line-height:1.4;margin:0 0 10px}
+.serviceRow{display:flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:7px;background:var(--surface);padding:9px}
+.serviceIcon{width:30px;height:30px;border-radius:7px;background:#e8f2ff;color:#276bc4;display:grid;place-items:center;font-size:16px;flex:0 0 auto}
+.serviceCopy{min-width:0;flex:1}
+.serviceTitle{font-size:11px;font-weight:800}
+.serviceTime{font-size:10px;color:var(--muted);margin-top:3px}
+.serviceAmount{font-size:11px;font-weight:850;white-space:nowrap}
+.tagGrid{display:flex;gap:7px;flex-wrap:wrap}
+.tag{min-height:34px;border:1px solid var(--line);border-radius:17px;padding:0 11px;background:var(--surface);font-size:11px;color:#46615f}
+.tag.selected{border-color:var(--teal);background:var(--teal-pale);color:var(--teal-dark);font-weight:800}
+.textarea{width:100%;min-height:92px;resize:vertical;border:1px solid var(--line);border-radius:7px;padding:10px;font-size:12px;line-height:1.45;color:var(--ink);background:var(--surface)}
+.counter{text-align:right;font-size:10px;color:var(--muted);margin-top:4px}
+.footerActions{flex:0 0 auto;display:grid;grid-template-columns:1fr 1.25fr;gap:8px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:var(--surface);border-top:1px solid var(--line)}
+.footerActions .primary,.footerActions .secondary{width:100%}
+.footerActions .primary:disabled{cursor:not-allowed;opacity:.45}
+.reviewSummary{border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:15px}
+.reviewResult{display:flex;align-items:center;gap:10px}
+.reviewFace{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#daf3e2;font-size:28px}
+.reviewResult strong{font-size:16px}
+.reviewResult span{display:block;font-size:11px;color:var(--muted);margin-top:3px}
+.reviewBlock{border-top:1px solid var(--line);padding:14px 0}
+.reviewBlock strong{font-size:12px}
+.commentBox{margin-top:8px;padding:10px;border-radius:7px;background:#f3f7f7;font-size:12px;line-height:1.45;color:#4b6261}
+.toast{position:fixed;z-index:20;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);max-width:calc(100vw - 32px);padding:10px 13px;border-radius:7px;background:#183e3c;color:#fff;font-size:12px;box-shadow:0 5px 16px #10262733;display:none}
+@media (min-width:481px){body{display:flex;align-items:center;justify-content:center;background:#dfe3ec}.shell{height:min(900px,100dvh);box-shadow:0 12px 38px #213b4626;border-left:1px solid #cbd7d9;border-right:1px solid #cbd7d9}}
+@media (max-width:340px){.page{padding-left:10px;padding-right:10px}.task{padding:11px}.sentiments{gap:6px}.sentiment{min-height:96px}.sentiment span{display:none}.footerActions{padding-left:10px;padding-right:10px}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const tasks=[
+  {id:"t1",agent:"Agent Alex",avatar:"👩🏻",date:"Oct 26, 2026 · 09:12",due:"Expires in 6 days",status:"pending",services:[{icon:"◈",title:"VIP Coins received",time:"Oct 26 · 09:12",amount:"10 Coins"}]},
+  {id:"t2",agent:"Agent Lily",avatar:"👩🏼",date:"Oct 24, 2026 · 15:28",due:"Expires in 4 days",status:"pending",services:[{icon:"◈",title:"VIP Coins received",time:"Oct 24 · 15:28",amount:"25 Coins"},{icon:"◷",title:"Timeout-Slots completed",time:"Oct 24 · 16:02",amount:"Coins used"}]},
+  {id:"t3",agent:"Agent Mark",avatar:"👨🏽",date:"Oct 25, 2026 · 18:40",due:"Reviewed Oct 25",status:"reviewed",sentiment:"positive",tags:["Quick Response","Helpful"],comment:"Great service, very helpful and friendly!",detailStatus:"added",services:[{icon:"◆",title:"Diamonds received",time:"Oct 25 · 18:40",amount:"50 Diamonds"}]},
+  {id:"t4",agent:"Agent John",avatar:"👨🏻",date:"Oct 22, 2026 · 11:05",due:"Reviewed Oct 22",status:"reviewed",sentiment:"okay",tags:[],comment:"",detailStatus:"not_added",services:[{icon:"◆",title:"Diamonds received",time:"Oct 22 · 11:05",amount:"20 Diamonds"}]}
+];
+const labels={negative:"Negative",okay:"Okay",positive:"Positive"};
+const tagSets={negative:["Slow Response","Problem Not Resolved","Poor Attitude","Unclear Information","Other"],okay:["Response Could Be Faster","Information Could Be Clearer","Other"],positive:["Quick Response","Helpful","Friendly","Clear Communication"]};
+let view="pending";
+let activeId="t1";
+let selectedSentiment="";
+let selectedTags=[];
+let comment="";
+
+function escapeHtml(value){return String(value||"").replace(/[&<>"']/g,function(character){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[character]})}
+function activeTask(){return tasks.find(function(task){return task.id===activeId})||tasks[0]}
+function toast(message){const element=document.getElementById("toast");element.textContent=message;element.style.display="block";clearTimeout(window.toastTimer);window.toastTimer=setTimeout(function(){element.style.display="none"},2200)}
+function topbar(title,back){const left=back?'<button class="iconButton" aria-label="Back" onclick="goList()">‹</button>':'<div class="brandMark" aria-hidden="true">▣</div>';return '<header class="topbar">'+left+'<div class="appName"><div class="appKicker">AGENT SERVICE</div><div class="appTitle">'+title+'</div></div><button class="iconButton" aria-label="Close" onclick="closeH5()">×</button></header>'}
+function services(task){return task.services.map(function(service){return '<div class="serviceRow"><div class="serviceIcon">'+service.icon+'</div><div class="serviceCopy"><div class="serviceTitle">'+escapeHtml(service.title)+'</div><div class="serviceTime">'+escapeHtml(service.time)+'</div></div><div class="serviceAmount">'+escapeHtml(service.amount)+'</div></div>'}).join("")}
+function taskCard(task){const pending=task.status==="pending";const sentiment=task.sentiment||"okay";const statusClass=pending?"pending":sentiment;const action=pending?'<button class="primary" onclick="openRating(\''+task.id+'\')">Rate now</button>':(task.detailStatus==="added"?'<button class="secondary" onclick="openReview(\''+task.id+'\')">View review</button>':'<button class="secondary" onclick="openRating(\''+task.id+'\')">Add details</button>');return '<article class="task"><div class="taskTop"><div class="avatar">'+task.avatar+'</div><div class="taskMeta"><div class="taskName">'+escapeHtml(task.agent)+'</div><div class="taskDate">'+escapeHtml(task.date)+'</div></div><span class="status '+statusClass+'">'+(pending?"Pending":labels[sentiment])+'</span></div><div class="chips">'+task.services.map(function(service){return '<span class="chip">'+escapeHtml(service.title)+'</span>'}).join("")+'</div><div class="taskBottom"><span class="due '+(pending?"":"done")+'">'+escapeHtml(pending?task.due:(task.detailStatus==="added"?"Details added":"Details not added"))+'</span>'+action+'</div></article>'}
+function listPage(reviewed){const items=tasks.filter(function(task){return reviewed?task.status==="reviewed":task.status==="pending"});const pendingCount=tasks.filter(function(task){return task.status==="pending"}).length;const reviewedCount=tasks.filter(function(task){return task.status==="reviewed"}).length;const list=items.length?items.map(taskCard).join(""):'<div class="empty"><div><strong>No reviews here yet</strong><br>Submitted ratings will appear in this list.</div></div>';return '<div class="shell">'+topbar("Service Feedback",false)+'<main class="scrollArea"><div class="page"><section class="intro"><div class="eyebrow">YOUR RECENT SERVICES</div><h1>Service Feedback</h1><p class="subtext">Rate completed agent services before each task expires.</p><div class="stats"><div class="stat"><div class="statNumber">'+pendingCount+'</div><div class="statLabel">Pending<br>reviews</div></div><div class="stat"><div class="statNumber">'+reviewedCount+'</div><div class="statLabel">Submitted<br>reviews</div></div></div><div class="tabs"><button class="tab '+(!reviewed?"active":"")+'" onclick="showList(false)">Pending ('+pendingCount+')</button><button class="tab '+(reviewed?"active":"")+'" onclick="showList(true)">Reviewed ('+reviewedCount+')</button></div></section><div class="listHead"><strong>'+(!reviewed?"Needs your feedback":"Recent reviews")+'</strong><span>'+items.length+" "+(items.length===1?"task":"tasks")+'</span></div><section class="taskList">'+list+'</section><p class="policy">Completed agent services are eligible for feedback. Each task expires 7 days after it is created.</p></div></main></div>'}
+function sentimentCards(sentiment,locked){return '<div class="sentiments">'+["negative","okay","positive"].map(function(key){const face=key==="negative"?"☹":key==="okay"?"😐":"☺";const descriptor=key==="negative"?"Not satisfied":key==="okay"?"Average":"Satisfied";return '<button class="sentiment '+key+" "+(sentiment===key?"selected":"")+'" '+(locked?"disabled":"")+' onclick="selectSentiment(\''+key+'\')"><div class="face">'+face+'</div><strong>'+labels[key]+'</strong><span>'+descriptor+'</span></button>'}).join("")+"</div>"}
+function formPage(){const task=activeTask();const adding=task.status==="reviewed";const sentiment=adding?task.sentiment:selectedSentiment;const tags=tagSets[sentiment]||[];const actionLabel=adding?"Save details":"Submit review";return '<div class="shell">'+topbar(adding?"Add details":"Rate service",true)+'<main class="scrollArea"><div class="detailPage"><div class="agentBlock"><div class="avatar">'+task.avatar+'</div><div><div class="agentName">'+escapeHtml(task.agent)+'</div><div class="agentDetail">'+escapeHtml(task.date)+'<br>Completed service</div></div></div><section class="formIntro"><h1>How was your experience?</h1><p class="subtext">'+(adding?"Your satisfaction rating is saved. Add optional context below.":"Choose one option, then add details only if they help.")+'</p></section>'+sentimentCards(sentiment,adding)+'<section class="section"><div class="sectionTitle">Service included</div><p class="sectionHelp">This completed service is attached to the feedback task.</p>'+services(task)+'</section><section class="section"><div class="sectionTitle">'+(sentiment==="negative"?"What went wrong?":sentiment==="positive"?"What helped?":"Feedback tags")+'</div><p class="sectionHelp">Select up to 3 tags.</p><div class="tagGrid">'+tags.map(function(tag){return '<button class="tag '+(selectedTags.includes(tag)?"selected":"")+'" onclick="toggleTag(\''+escapeHtml(tag)+'\')">'+(selectedTags.includes(tag)?"✓ ":"")+escapeHtml(tag)+"</button>"}).join("")+(sentiment?"":'<span class="sectionHelp">Select satisfaction to reveal tags.</span>')+'</div></section><section class="section"><label class="sectionTitle" for="comment">Tell us more <span class="sectionHelp">(Optional)</span></label><textarea id="comment" class="textarea" maxlength="200" placeholder="Share details about your experience..." oninput="comment=this.value;updateCounter()">'+escapeHtml(comment)+'</textarea><div class="counter" id="counter">'+comment.length+'/200</div></section></div></main><footer class="footerActions"><button class="secondary" onclick="goList()">Cancel</button><button class="primary" '+(!adding&&!sentiment?"disabled":"")+' onclick="'+(adding?"saveDetails()":"submitReview()")+'">'+actionLabel+'</button></footer></div>'}
+function reviewPage(){const task=activeTask();const sentiment=task.sentiment||"okay";const face=sentiment==="negative"?"☹":sentiment==="okay"?"😐":"☺";return '<div class="shell">'+topbar("Review details",true)+'<main class="scrollArea"><div class="detailPage"><div class="agentBlock"><div class="avatar">'+task.avatar+'</div><div><div class="agentName">'+escapeHtml(task.agent)+'</div><div class="agentDetail">'+escapeHtml(task.date)+'<br>Completed service</div></div></div><section class="formIntro"><h1>Your review</h1><p class="subtext">Feedback submitted for this agent service.</p></section><div class="reviewSummary"><div class="reviewResult"><div class="reviewFace">'+face+'</div><div><strong>'+labels[sentiment]+'</strong><span>Satisfaction rating submitted</span></div></div></div><section class="reviewBlock"><strong>Feedback tags</strong><div class="tagGrid" style="margin-top:9px">'+(task.tags&&task.tags.length?task.tags.map(function(tag){return '<span class="tag selected" style="display:inline-grid;place-items:center">✓ '+escapeHtml(tag)+"</span>"}).join(""):'<span class="sectionHelp">No additional tags submitted.</span>')+'</div></section><section class="reviewBlock"><strong>Your comment</strong><div class="commentBox">'+(task.comment?escapeHtml(task.comment):"No written comment submitted.")+'</div></section><section class="reviewBlock"><strong>Service included</strong><div style="margin-top:9px">'+services(task)+'</div></section></div></main><footer class="footerActions"><button class="secondary" onclick="goList()">Back to reviews</button>'+((task.detailStatus!=="added")?'<button class="primary" onclick="openRating(\''+task.id+'\')">Add details</button>':'<button class="primary" onclick="goList()">Done</button>')+'</footer></div>'}
+function render(){const root=document.getElementById("app");root.innerHTML=view==="form"?formPage():view==="review"?reviewPage():listPage(view==="reviewed")}
+function showList(reviewed){view=reviewed?"reviewed":"pending";render()}
+function goList(){view=activeTask().status==="reviewed"?"reviewed":"pending";selectedSentiment="";selectedTags=[];comment="";render()}
+function openRating(id){activeId=id;const task=activeTask();selectedSentiment=task.status==="reviewed"?(task.sentiment||""):"";selectedTags=task.tags?[].concat(task.tags):[];comment=task.comment||"";view="form";render()}
+function openReview(id){activeId=id;view="review";render()}
+function selectSentiment(value){if(activeTask().status==="reviewed")return;selectedSentiment=value;selectedTags=[];render()}
+function toggleTag(tag){if(selectedTags.includes(tag)){selectedTags=selectedTags.filter(function(item){return item!==tag})}else if(selectedTags.length<3){selectedTags=selectedTags.concat(tag)}render()}
+function updateCounter(){const counter=document.getElementById("counter");if(counter){counter.textContent=comment.length+"/200"}}
+function submitReview(){if(!selectedSentiment)return;const task=activeTask();task.status="reviewed";task.sentiment=selectedSentiment;task.tags=[].concat(selectedTags);task.comment=comment;task.detailStatus=(task.tags.length||task.comment)?"added":"not_added";view="reviewed";selectedSentiment="";selectedTags=[];comment="";render();toast("Rating submitted.")}
+function saveDetails(){const task=activeTask();task.tags=[].concat(selectedTags);task.comment=comment;task.detailStatus="added";view="reviewed";selectedTags=[];comment="";render();toast("Feedback details saved.")}
+function closeH5(){toast("Return to game requested.")}
+render();
+</script>
+</body>
+</html>
