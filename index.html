@@ -26,6 +26,11 @@ button:focus-visible,textarea:focus-visible{outline:3px solid var(--focus);outli
 .intro{padding:0 2px 4px}
 .eyebrow{font-size:12px;font-weight:850;color:var(--brand-strong);line-height:1.3}
 h1{font-size:30px;font-weight:950;line-height:1.18;margin:6px 0 7px}
+.introTitleRow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:6px 0 7px}
+.introTitleRow h1{min-width:0;margin:0}
+.languagePicker{display:inline-flex;flex:0 0 auto;gap:2px;padding:3px;border:1px solid #c7ddee;border-radius:8px;background:#eaf1f8}
+.languageButton{min-width:34px;height:30px;border:0;border-radius:5px;padding:0 7px;background:transparent;color:#5a6d86;font-size:12px;font-weight:950;line-height:1}
+.languageButton.active{background:var(--surface);color:var(--brand-strong);box-shadow:0 1px 4px rgba(21,46,76,.12)}
 .subtext{font-size:15px;line-height:1.5;color:var(--muted);margin:0}
 .tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:20px;padding:4px;border-radius:10px;background:#eaf1f8}
 .tab{min-height:46px;border:0;border-radius:7px;background:transparent;color:var(--muted);font-size:18px;font-weight:850;transition:background .15s ease,color .15s ease}
@@ -47,6 +52,7 @@ h1{font-size:30px;font-weight:950;line-height:1.18;margin:6px 0 7px}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
 .chip{font-size:14px;line-height:1.3;color:#41536d;background:#f0f6fc;border-radius:6px;padding:6px 9px}
 .taskBottom{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto}
+.taskBottom.actionOnly{justify-content:flex-end}
 .due{font-size:14px;line-height:1.35;color:var(--warning)}
 .due.done{color:var(--muted)}
 .primary,.secondary{min-height:48px;border-radius:8px;padding:0 17px;font-size:16px;font-weight:950;white-space:nowrap;transition:background .15s ease,border-color .15s ease,color .15s ease}
@@ -54,7 +60,11 @@ h1{font-size:30px;font-weight:950;line-height:1.18;margin:6px 0 7px}
 .primary:hover{border-color:var(--brand-strong);background:var(--brand-strong)}
 .secondary{border:1px solid #cfe2f5;background:var(--surface);color:#354b69}
 .secondary:hover{border-color:#a3c6e7;background:var(--brand-soft);color:var(--brand-strong)}
-.empty{min-height:190px;display:grid;place-items:center;text-align:center;border:1px dashed #bfd4e9;border-radius:10px;background:#fbfdff;color:var(--muted);padding:24px;font-size:15px;line-height:1.5}
+.empty{min-height:210px;display:grid;place-items:center;text-align:center;border:1px dashed #bfd4e9;border-radius:10px;background:#fbfdff;color:var(--muted);padding:24px}
+.emptyContent{display:grid;justify-items:center;gap:7px}
+.emptyIcon{width:48px;height:48px;display:grid;place-items:center;border-radius:50%;background:#e7f3ff;color:var(--brand-strong);font-size:26px;font-weight:950;line-height:1}
+.empty strong{color:var(--ink);font-size:16px;font-weight:950}
+.empty span{max-width:250px;font-size:13px;line-height:1.5}
 .policy{font-size:14px;line-height:1.55;color:var(--muted);padding:20px 2px 4px}
 .detailPage{padding:18px 16px 12px}
 .agentBlock{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:0 0 16px}
@@ -116,7 +126,7 @@ h1{font-size:30px;font-weight:950;line-height:1.18;margin:6px 0 7px}
 .commentBox{min-width:0;max-width:100%;margin-top:9px;padding:12px;border-radius:8px;background:#f2f7fc;font-size:14px;line-height:1.55;color:#405775;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word}
 .toast{position:fixed;z-index:20;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);max-width:calc(100vw - 32px);padding:11px 14px;border-radius:8px;background:#10182b;color:#fff;font-size:14px;font-weight:850;box-shadow:0 7px 18px rgba(16,38,43,.24);display:none}
 @media (min-width:481px){body{display:flex;align-items:center;justify-content:center;background:#e6eef7}.shell{height:min(900px,100dvh);border:1px solid #d4e4f4;border-radius:14px;box-shadow:0 18px 48px rgba(21,46,76,.14)}}
-@media (max-width:340px){.page,.detailPage{padding-left:12px;padding-right:12px}.task{padding:13px}.sentiments{gap:8px}.sentiment{min-height:100px}.footerActions{padding-left:12px;padding-right:12px}.primary,.secondary{padding:0 12px}}
+@media (max-width:340px){.page,.detailPage{padding-left:12px;padding-right:12px}.introTitleRow h1{font-size:27px}.task{padding:13px}.sentiments{gap:8px}.sentiment{min-height:100px}.footerActions{padding-left:12px;padding-right:12px}.primary,.secondary{padding:0 12px}}
 </style>
 </head>
 <body>
@@ -124,10 +134,10 @@ h1{font-size:30px;font-weight:950;line-height:1.18;margin:6px 0 7px}
 <div class="toast" id="toast" role="status"></div>
 <script>
 const tasks=[
-  {id:"t1",agent:"Agent Alex",avatar:"👩🏻",date:"Oct 26, 2026 · 09:12",due:"Rate by Nov 01, 2026",status:"pending",services:[{asset:"vipassets",title:"VIP Assets received",time:"Oct 26 · 09:12",amount:"10 VIP Assets"}]},
-  {id:"t2",agent:"Agent Lily",avatar:"👩🏼",date:"Oct 24, 2026 · 15:28",due:"Rate by Oct 30, 2026",status:"pending",services:[{asset:"groupasset",title:"Group Assets received",time:"Oct 24 · 15:28",amount:"25 Group Assets"},{asset:"diamond",title:"Diamond used for Timeout-Slots",time:"Oct 24 · 16:02",amount:"Diamond used"}]},
-  {id:"t3",agent:"Agent Mark",avatar:"👨🏽",date:"Oct 25, 2026 · 18:40",due:"Reviewed Oct 25",status:"reviewed",sentiment:"positive",tags:["Fast response","Answers questions thoroughly"],comment:"Great service, very helpful and friendly!",detailStatus:"added",services:[{asset:"diamond",title:"Diamond received",time:"Oct 25 · 18:40",amount:"50 Diamond"}]},
-  {id:"t4",agent:"Agent John",avatar:"👨🏻",date:"Oct 22, 2026 · 11:05",due:"Reviewed Oct 22",status:"reviewed",sentiment:"negative",tags:[],comment:"",detailStatus:"not_added",services:[{asset:"groupasset",title:"Group Assets received",time:"Oct 22 · 11:05",amount:"20 Group Assets"}]}
+  {id:"t1",agent:"Agent Alex",avatar:"👩🏻",date:"Oct 26, 2026",due:"Rate by Nov 01, 2026",status:"pending",services:[{asset:"vipassets",title:"VIP Assets received",time:"Oct 26 · 09:12",amount:"10 VIP Assets"}]},
+  {id:"t2",agent:"Agent Lily",avatar:"👩🏼",date:"Oct 24, 2026",due:"Rate by Oct 30, 2026",status:"pending",services:[{asset:"groupasset",title:"Group Assets received",time:"Oct 24 · 15:28",amount:"25 Group Assets"},{asset:"diamond",title:"Diamond used for Timeout-Slots",time:"Oct 24 · 16:02",amount:"Diamond used"}]},
+  {id:"t3",agent:"Agent Mark",avatar:"👨🏽",date:"Oct 25, 2026",due:"Reviewed Oct 25",status:"reviewed",sentiment:"positive",tags:["Fast response","Answers questions thoroughly"],comment:"Great service, very helpful and friendly!",detailStatus:"added",services:[{asset:"diamond",title:"Diamond received",time:"Oct 25 · 18:40",amount:"50 Diamond"}]},
+  {id:"t4",agent:"Agent John",avatar:"👨🏻",date:"Oct 22, 2026",due:"Reviewed Oct 22",status:"reviewed",sentiment:"negative",tags:[],comment:"",detailStatus:"not_added",services:[{asset:"groupasset",title:"Group Assets received",time:"Oct 22 · 11:05",amount:"20 Group Assets"}]}
 ];
 const labels={negative:"Negative",positive:"Positive"};
 const sentimentAssets={negative:{selected:"sentiment-negative-selected.png",unselected:"sentiment-negative-unselected.png"},positive:{selected:"sentiment-positive-selected.png",unselected:"sentiment-positive-unselected.png"}};
@@ -139,21 +149,104 @@ let selectedSentiment="";
 let selectedTags=[];
 let comment="";
 let anonymous=true;
+let language="EN";
+
+const translations={
+  PH:{
+    "AGENT SERVICES IN THE LAST 7 DAYS":"MGA SERBISYO NG AHENTE SA NAKARAANG 7 ARAW",
+    "You can rate completed agent services within 7 days of completion.":"Maaari mong i-rate ang nakumpletong serbisyo ng ahente sa loob ng 7 araw matapos itong makumpleto.",
+    "Your satisfaction rating is saved. Add optional context below.":"Naka-save na ang rating ng iyong kasiyahan. Magdagdag ng opsyonal na detalye sa ibaba.",
+    "Choose one option, then add details only if they help.":"Pumili ng isang opsyon, saka magdagdag ng detalye kung makatutulong.",
+    "This completed service is attached to the feedback task.":"Ang nakumpletong serbisyong ito ay naka-ugnay sa iyong feedback.",
+    "Agents cannot see your identity while this is on.":"Hindi makikita ng ahente ang iyong pagkakakilanlan habang naka-on ito.",
+    "Your identity will not be shared with the agent.":"Hindi ibabahagi sa ahente ang iyong pagkakakilanlan.",
+    "Your identity will be shared with the agent.":"Ibabahagi sa ahente ang iyong pagkakakilanlan.",
+    "Feedback submitted for this agent service.":"Naipasa ang feedback para sa serbisyong ito ng ahente.",
+    "Ratings you submit will appear here.":"Lalabas dito ang mga ipinasang rating.",
+    "You have no services waiting for a rating.":"Wala kang serbisyong naghihintay ng rating.",
+    "Satisfaction rating submitted":"Naipasa ang rating ng kasiyahan",
+    "Submitted with identity":"Isinumite kasama ang pagkakakilanlan",
+    "Submitted anonymously":"Isinumite nang hindi nagpapakilala",
+    "No additional tags submitted.":"Walang karagdagang tag na isinumite.",
+    "Share details about your experience...":"Ibahagi ang detalye ng iyong karanasan...",
+    "Choose any tags that describe the service.":"Piliin ang mga tag na naglalarawan sa serbisyo.",
+    "Diamond used for Timeout-Slots":"Diamond na ginamit para sa Timeout-Slots",
+    "Answers questions thoroughly":"Masusing sumasagot sa mga tanong",
+    "Additional processing fees":"Karagdagang bayarin sa pagproseso",
+    "Service Rating":"Rating ng Serbisyo",
+    "Help us improve agent service.":"Tulungan kaming mapabuti ang serbisyo ng ahente.",
+    "Rate your experience":"I-rate ang iyong karanasan",
+    "Recent rating":"Mga kamakailang rating",
+    "To rate (":"Ire-rate (",
+    "Rated (":"Na-rate (",
+    "Rate now":"I-rate ngayon",
+    "View rating":"Tingnan ang rating",
+    "Add details":"Magdagdag ng detalye",
+    "Details added":"Naidagdag ang detalye",
+    "Details not added":"Walang idinagdag na detalye",
+    "No ratings yet":"Wala pang rating",
+    "All caught up":"Kumpleto na",
+    "Save details":"I-save ang detalye",
+    "Submit Rating":"Isumite ang rating",
+    "Submit anonymously":"Magsumite nang hindi nagpapakilala",
+    "Rate service":"I-rate ang serbisyo",
+    "Service included":"Kasamang serbisyo",
+    "How was your experience?":"Kumusta ang iyong karanasan?",
+    "Feedback tags":"Mga tag ng feedback",
+    "Tell us more":"Magbahagi pa",
+    "Review details":"Mga detalye ng rating",
+    "Completed service":"Nakumpletong serbisyo",
+    "Your review":"Iyong rating",
+    "Your comment":"Iyong komento",
+    "No written comment submitted.":"Walang naisumiteng komento.",
+    "Rating submitted.":"Naipasa ang rating.",
+    "Feedback details saved.":"Na-save ang mga detalye ng feedback.",
+    "Return to game requested.":"Hiniling ang pagbabalik sa laro.",
+    "Service attitude":"Pag-uugali sa serbisyo",
+    "Response time":"Oras ng pagtugon",
+    "Abusive language":"Mapang-abusong pananalita",
+    "Refuses to communicate":"Tumangging makipag-usap",
+    "Delayed reply":"Naantalang tugon",
+    "Delayed top-up":"Naantalang top-up",
+    "Delayed redemption":"Naantalang redemption",
+    "Polite and patient":"Magalang at matiyaga",
+    "Fast response":"Mabilis na tugon",
+    "Fast top-up":"Mabilis na top-up",
+    "Fast redemption":"Mabilis na redemption",
+    "VIP Assets received":"Natanggap ang VIP Assets",
+    "Group Assets received":"Natanggap ang Group Assets",
+    "Diamond received":"Natanggap ang Diamond",
+    "Diamond used":"Ginamit na Diamond",
+    "Pending":"Naghihintay",
+    "Negative":"Negatibo",
+    "Positive":"Positibo",
+    "(Optional)":"(Opsyonal)",
+    "Cancel":"Kanselahin",
+    "Back":"Bumalik",
+    "Done":"Tapos",
+    "Oct":"Okt",
+    "Nov":"Nob"
+  }
+};
 
 function escapeHtml(value){return String(value||"").replace(/[&<>"']/g,function(character){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[character]})}
+function translateText(value){const dictionary=translations[language];if(!dictionary)return String(value);return Object.keys(dictionary).sort(function(left,right){return right.length-left.length}).reduce(function(output,source){return output.split(source).join(dictionary[source])},String(value))}
 function activeTask(){return tasks.find(function(task){return task.id===activeId})||tasks[0]}
-function toast(message){const element=document.getElementById("toast");element.textContent=message;element.style.display="block";clearTimeout(window.toastTimer);window.toastTimer=setTimeout(function(){element.style.display="none"},2200)}
+function toast(message){const element=document.getElementById("toast");element.textContent=translateText(message);element.style.display="block";clearTimeout(window.toastTimer);window.toastTimer=setTimeout(function(){element.style.display="none"},2200)}
 function topbar(title,back){const left=back?'<button class="iconButton" aria-label="Back" onclick="goList()">‹</button>':'<img class="brandMark" src="tongits-go-logo.png" alt="Tongits Go">';return '<header class="topbar">'+left+'<div class="appName"><div class="appTitle">'+title+'</div></div><button class="iconButton" aria-label="Close" onclick="closeH5()">×</button></header>'}
+function languagePicker(){return '<div class="languagePicker" role="group" aria-label="Language"><button class="languageButton '+(language==="EN"?"active":"")+'" type="button" aria-pressed="'+(language==="EN")+'" onclick="setLanguage(\'EN\')">EN</button><button class="languageButton '+(language==="PH"?"active":"")+'" type="button" aria-pressed="'+(language==="PH")+'" onclick="setLanguage(\'PH\')">PH</button></div>'}
 function services(task,showTime){return task.services.map(function(service){const asset=serviceAssets[service.asset]||serviceAssets.diamond;return '<div class="serviceRow"><div class="serviceIcon"><img class="serviceAsset" src="'+asset+'" alt=""></div><div class="serviceCopy"><div class="serviceTitle">'+escapeHtml(service.title)+'</div>'+(showTime?'<div class="serviceTime">'+escapeHtml(service.time)+'</div>':'')+'</div><div class="serviceAmount">'+escapeHtml(service.amount)+'</div></div>'}).join("")}
-function taskCard(task){const pending=task.status==="pending";const sentiment=task.sentiment||"positive";const statusClass=pending?"pending":sentiment;const action=pending?'<button class="primary" onclick="openRating(\''+task.id+'\')">Rate now</button>':(task.detailStatus==="added"?'<button class="secondary" onclick="openReview(\''+task.id+'\')">View rating</button>':'<button class="secondary" onclick="openRating(\''+task.id+'\')">Add details</button>');return '<article class="task"><div class="taskTop"><div class="avatar">'+task.avatar+'</div><div class="taskMeta"><div class="taskName">'+escapeHtml(task.agent)+'</div><div class="taskDate">'+escapeHtml(task.date)+'</div></div><span class="status '+statusClass+'">'+(pending?"Pending":labels[sentiment])+'</span></div><div class="chips">'+task.services.map(function(service){return '<span class="chip">'+escapeHtml(service.title)+'</span>'}).join("")+'</div><div class="taskBottom"><span class="due '+(pending?"":"done")+'">'+escapeHtml(pending?task.due:(task.detailStatus==="added"?"Details added":"Details not added"))+'</span>'+action+'</div></article>'}
-function listPage(reviewed){const items=tasks.filter(function(task){return reviewed?task.status==="reviewed":task.status==="pending"});const pendingCount=tasks.filter(function(task){return task.status==="pending"}).length;const reviewedCount=tasks.filter(function(task){return task.status==="reviewed"}).length;const list=items.length?items.map(taskCard).join(""):'<div class="empty"><div><strong>No reviews here yet</strong><br>Submitted ratings will appear in this list.</div></div>';return '<div class="shell">'+topbar("Service Rating",false)+'<main class="scrollArea"><div class="page"><section class="intro"><div class="eyebrow">AGENT SERVICES IN THE LAST 7 DAYS</div><h1>Service Rating</h1><p class="subtext">Help us improve agent service.</p><div class="tabs"><button class="tab '+(!reviewed?"active":"")+'" onclick="showList(false)">To rate ('+pendingCount+')</button><button class="tab '+(reviewed?"active":"")+'" onclick="showList(true)">Rated ('+reviewedCount+')</button></div></section><div class="listHead"><strong>'+(!reviewed?"Rate your experience":"Recent reviews")+'</strong></div><section class="taskList">'+list+'</section><p class="policy">You can rate completed agent services within 7 days of completion.</p></div></main></div>'}
+function taskCard(task){const pending=task.status==="pending";const sentiment=task.sentiment||"positive";const statusClass=pending?"pending":sentiment;const action=pending?'<button class="primary" onclick="openRating(\''+task.id+'\')">Rate now</button>':(task.detailStatus==="added"?'<button class="secondary" onclick="openReview(\''+task.id+'\')">View rating</button>':'<button class="secondary" onclick="openRating(\''+task.id+'\')">Add details</button>');const detailStatus=pending?"":'<span class="due done">'+escapeHtml(task.detailStatus==="added"?"Details added":"Details not added")+'</span>';return '<article class="task"><div class="taskTop"><div class="avatar">'+task.avatar+'</div><div class="taskMeta"><div class="taskName">'+escapeHtml(task.agent)+'</div><div class="taskDate">'+escapeHtml(task.date)+'</div></div><span class="status '+statusClass+'">'+(pending?"Pending":labels[sentiment])+'</span></div><div class="chips">'+task.services.map(function(service){return '<span class="chip">'+escapeHtml(service.title)+'</span>'}).join("")+'</div><div class="taskBottom '+(pending?"actionOnly":"")+'">'+detailStatus+action+'</div></article>'}
+function emptyListState(reviewed){const state=reviewed?{icon:"★",title:"No ratings yet",description:"Ratings you submit will appear here."}:{icon:"✓",title:"All caught up",description:"You have no services waiting for a rating."};return '<div class="empty"><div class="emptyContent"><div class="emptyIcon" aria-hidden="true">'+state.icon+'</div><strong>'+state.title+'</strong><span>'+state.description+'</span></div></div>'}
+function listPage(reviewed){const items=tasks.filter(function(task){return reviewed?task.status==="reviewed":task.status==="pending"});const pendingCount=tasks.filter(function(task){return task.status==="pending"}).length;const reviewedCount=tasks.filter(function(task){return task.status==="reviewed"}).length;const list=items.length?items.map(taskCard).join(""):emptyListState(reviewed);return '<div class="shell">'+topbar("Service Rating",false)+'<main class="scrollArea"><div class="page"><section class="intro"><div class="eyebrow">AGENT SERVICES IN THE LAST 7 DAYS</div><div class="introTitleRow"><h1>Service Rating</h1>'+languagePicker()+'</div><p class="subtext">Help us improve agent service.</p><div class="tabs"><button class="tab '+(!reviewed?"active":"")+'" onclick="showList(false)">To rate ('+pendingCount+')</button><button class="tab '+(reviewed?"active":"")+'" onclick="showList(true)">Rated ('+reviewedCount+')</button></div></section><div class="listHead"><strong>'+(!reviewed?"Rate your experience":"Recent rating")+'</strong></div><section class="taskList">'+list+'</section><p class="policy">You can rate completed agent services within 7 days of completion.</p></div></main></div>'}
 function sentimentCards(sentiment,locked){return '<div class="sentiments">'+["negative","positive"].map(function(key){const selected=sentiment===key;const icon=sentimentAssets[key].unselected;return '<button class="sentiment '+key+" "+(selected?"selected":"")+'" '+(locked?"disabled":"")+' onclick="selectSentiment(\''+key+'\')"><div class="face"><img src="'+icon+'" alt=""></div><strong>'+labels[key]+'</strong></button>'}).join("")+"</div>"}
 function tagGroupMarkup(groups,sentiment){if(!sentiment)return '<p class="sectionHelp">Select satisfaction to reveal tags.</p>';return '<div class="tagGroups">'+[{title:"Service attitude",tags:groups.attitude},{title:"Response time",tags:groups.responseTime}].map(function(group){return '<div class="tagGroup"><div class="tagGroupTitle">'+group.title+'</div><div class="tagGrid">'+group.tags.map(function(tag){return '<button class="tag '+(selectedTags.includes(tag)?"selected":"")+'" onclick="toggleTag(\''+escapeHtml(tag)+'\')">'+(selectedTags.includes(tag)?"✓ ":"")+escapeHtml(tag)+"</button>"}).join("")+'</div></div>'}).join("")+"</div>"}
 function formPage(){const task=activeTask();const adding=task.status==="reviewed";const sentiment=adding?task.sentiment:selectedSentiment;const groups=tagSets[sentiment];const actionLabel=adding?"Save details":"Submit Rating";const anonymousControl=adding?"":'<button class="anonymousControl" type="button" role="switch" aria-checked="'+(anonymous?"true":"false")+'" onclick="toggleAnonymous()"><span class="anonymousCopy"><strong>Submit anonymously</strong><span>Agents cannot see your identity while this is on.</span></span><span class="anonymousSwitch '+(anonymous?"on":"")+'" aria-hidden="true"></span></button>';const anonymousFooter=adding?"":'<p class="anonymousFooter">'+(anonymous?"Your identity will not be shared with the agent.":"Your identity will be shared with the agent.")+'</p>';return '<div class="shell">'+topbar(adding?"Add details":"Rate service",true)+'<main class="scrollArea"><div class="detailPage"><div class="agentBlock"><div class="avatar">'+task.avatar+'</div><div><div class="agentName">'+escapeHtml(task.agent)+'</div><div class="agentDetail">'+escapeHtml(task.date)+'</div></div></div><section class="section"><div class="sectionTitle">Service included</div><p class="sectionHelp">This completed service is attached to the feedback task.</p>'+services(task,false)+'</section><section class="formIntro"><h1>How was your experience?</h1><p class="subtext">'+(adding?"Your satisfaction rating is saved. Add optional context below.":"Choose one option, then add details only if they help.")+'</p></section>'+anonymousControl+sentimentCards(sentiment,adding)+'<section class="section"><div class="sectionTitle">Feedback tags <span class="sectionHelp">(Optional)</span></div><p class="sectionHelp">Choose any tags that describe the service.</p>'+tagGroupMarkup(groups,sentiment)+'</section><section class="section"><label class="sectionTitle" for="comment">Tell us more <span class="sectionHelp">(Optional)</span></label><textarea id="comment" class="textarea" maxlength="200" placeholder="Share details about your experience..." oninput="comment=this.value;updateCounter()">'+escapeHtml(comment)+'</textarea><div class="counter" id="counter">'+comment.length+'/200</div></section></div></main><footer class="footerActions">'+anonymousFooter+'<div class="footerActionButtons"><button class="secondary" onclick="goList()">Cancel</button><button class="primary" '+(!adding&&!sentiment?"disabled":"")+' onclick="'+(adding?"saveDetails()":"submitReview()")+'">'+actionLabel+'</button></div></footer></div>'}
-function reviewPage(){const task=activeTask();const sentiment=task.sentiment||"positive";const face='<img src="'+sentimentAssets[sentiment].unselected+'" alt="">';const anonymityLabel=task.anonymous===false?"Submitted with identity":"Submitted anonymously";return '<div class="shell">'+topbar("Review details",true)+'<main class="scrollArea"><div class="detailPage"><div class="agentBlock"><div class="avatar">'+task.avatar+'</div><div><div class="agentName">'+escapeHtml(task.agent)+'</div><div class="agentDetail">'+escapeHtml(task.date)+'<br>Completed service</div></div></div><section class="formIntro"><h1>Your review</h1><p class="subtext">Feedback submitted for this agent service.</p></section><div class="reviewSummary"><div class="reviewResult"><div class="reviewFace">'+face+'</div><div><strong>'+labels[sentiment]+'</strong><span>Satisfaction rating submitted<br><b class="anonymousReview">'+anonymityLabel+'</b></span></div></div></div><section class="reviewBlock"><strong>Feedback tags</strong><div class="tagGrid" style="margin-top:9px">'+(task.tags&&task.tags.length?task.tags.map(function(tag){return '<span class="tag selected" style="display:inline-grid;place-items:center">✓ '+escapeHtml(tag)+"</span>"}).join(""):'<span class="sectionHelp">No additional tags submitted.</span>')+'</div></section><section class="reviewBlock"><strong>Your comment</strong><div class="commentBox">'+(task.comment?escapeHtml(task.comment):"No written comment submitted.")+'</div></section><section class="reviewBlock"><strong>Service included</strong><div style="margin-top:9px">'+services(task,true)+'</div></section></div></main><footer class="footerActions"><div class="footerActionButtons"><button class="secondary" onclick="goList()">Back</button>'+((task.detailStatus!=="added")?'<button class="primary" onclick="openRating(\''+task.id+'\')">Add details</button>':'<button class="primary" onclick="goList()">Done</button>')+'</div></footer></div>'}
-function render(){const root=document.getElementById("app");root.innerHTML=view==="form"?formPage():view==="review"?reviewPage():listPage(view==="reviewed")}
+function reviewPage(){const task=activeTask();const sentiment=task.sentiment||"positive";const face='<img src="'+sentimentAssets[sentiment].unselected+'" alt="">';const anonymityLabel=task.anonymous===false?"Submitted with identity":"Submitted anonymously";return '<div class="shell">'+topbar("Review details",true)+'<main class="scrollArea"><div class="detailPage"><div class="agentBlock"><div class="avatar">'+task.avatar+'</div><div><div class="agentName">'+escapeHtml(task.agent)+'</div><div class="agentDetail">'+escapeHtml(task.date)+'<br>Completed service</div></div></div><section class="reviewBlock"><strong>Service included</strong><div style="margin-top:9px">'+services(task,true)+'</div></section><section class="formIntro"><h1>Your review</h1><p class="subtext">Feedback submitted for this agent service.</p></section><div class="reviewSummary"><div class="reviewResult"><div class="reviewFace">'+face+'</div><div><strong>'+labels[sentiment]+'</strong><span>Satisfaction rating submitted<br><b class="anonymousReview">'+anonymityLabel+'</b></span></div></div></div><section class="reviewBlock"><strong>Feedback tags</strong><div class="tagGrid" style="margin-top:9px">'+(task.tags&&task.tags.length?task.tags.map(function(tag){return '<span class="tag selected" style="display:inline-grid;place-items:center">✓ '+escapeHtml(tag)+"</span>"}).join(""):'<span class="sectionHelp">No additional tags submitted.</span>')+'</div></section><section class="reviewBlock"><strong>Your comment</strong><div class="commentBox">'+(task.comment?escapeHtml(task.comment):"No written comment submitted.")+'</div></section></div></main><footer class="footerActions"><div class="footerActionButtons"><button class="secondary" onclick="goList()">Back</button>'+((task.detailStatus!=="added")?'<button class="primary" onclick="openRating(\''+task.id+'\')">Add details</button>':'<button class="primary" onclick="goList()">Done</button>')+'</div></footer></div>'}
+function render(){const root=document.getElementById("app");const markup=view==="form"?formPage():view==="review"?reviewPage():listPage(view==="reviewed");root.innerHTML=translateText(markup);if(document.documentElement){document.documentElement.lang=language==="PH"?"fil":"en"}if("title" in document){document.title=language==="PH"?"Rating ng Serbisyo · Portrait Prototype":"Service Rating · Portrait Prototype"}}
 function renderPreservingScroll(){const scrollArea=document.querySelector(".scrollArea");const scrollTop=scrollArea?scrollArea.scrollTop:0;render();const updatedScrollArea=document.querySelector(".scrollArea");if(updatedScrollArea){updatedScrollArea.scrollTop=scrollTop;requestAnimationFrame(function(){updatedScrollArea.scrollTop=scrollTop})}}
 function showList(reviewed){view=reviewed?"reviewed":"pending";render()}
+function setLanguage(value){if(value!=="EN"&&value!=="PH")return;language=value;render()}
 function goList(){view=activeTask().status==="reviewed"?"reviewed":"pending";selectedSentiment="";selectedTags=[];comment="";anonymous=true;render()}
 function openRating(id){activeId=id;const task=activeTask();selectedSentiment=task.status==="reviewed"?(task.sentiment||""):"";selectedTags=task.tags?[].concat(task.tags):[];comment=task.comment||"";anonymous=task.status==="reviewed"?(task.anonymous!==false):true;view="form";render()}
 function toggleAnonymous(){if(activeTask().status==="reviewed")return;anonymous=!anonymous;renderPreservingScroll()}
