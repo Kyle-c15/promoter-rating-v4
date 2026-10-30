@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0878dd">
-<title>Service Rating · Portrait Prototype</title>
+<title>Service Rating · Tongits Go</title>
 <style>
 :root{--brand:#0878dd;--brand-strong:#055cae;--brand-soft:#eef7ff;--ink:#10182b;--muted:#66758b;--line:#d7e8f8;--canvas:#f5f9fd;--surface:#fff;--warning:#9a6512;--warning-soft:#fff3dc;--success:#0878dd;--success-soft:#eaf4ff;--danger:#b43d41;--danger-soft:#fff0f0;--focus:#0878dd;--shadow:0 8px 22px rgba(21,46,76,.08)}
 *{box-sizing:border-box}
@@ -132,12 +132,13 @@ h1{font-size:30px;font-weight:950;line-height:1.18;margin:6px 0 7px}
 <body>
 <div id="app"></div>
 <div class="toast" id="toast" role="status"></div>
+<script src="translation-config.js"></script>
 <script>
 const tasks=[
   {id:"t1",agent:"Agent Alex",avatar:"👩🏻",date:"Oct 26, 2026",due:"Rate by Nov 01, 2026",status:"pending",services:[{asset:"vipassets",title:"VIP Assets received",time:"Oct 26 · 09:12",amount:"10 VIP Assets"}]},
-  {id:"t2",agent:"Agent Lily",avatar:"👩🏼",date:"Oct 24, 2026",due:"Rate by Oct 30, 2026",status:"pending",services:[{asset:"groupasset",title:"Group Assets received",time:"Oct 24 · 15:28",amount:"25 Group Assets"},{asset:"diamond",title:"Diamond used for Timeout-Slots",time:"Oct 24 · 16:02",amount:"Diamond used"}]},
-  {id:"t3",agent:"Agent Mark",avatar:"👨🏽",date:"Oct 25, 2026",due:"Reviewed Oct 25",status:"reviewed",sentiment:"positive",tags:["Fast response","Answers questions thoroughly"],comment:"Great service, very helpful and friendly!",detailStatus:"added",services:[{asset:"diamond",title:"Diamond received",time:"Oct 25 · 18:40",amount:"50 Diamond"}]},
-  {id:"t4",agent:"Agent John",avatar:"👨🏻",date:"Oct 22, 2026",due:"Reviewed Oct 22",status:"reviewed",sentiment:"negative",tags:[],comment:"",detailStatus:"not_added",services:[{asset:"groupasset",title:"Group Assets received",time:"Oct 22 · 11:05",amount:"20 Group Assets"}]}
+  {id:"t2",agent:"Agent Lily",avatar:"👩🏼",date:"Oct 24, 2026",due:"Rate by Oct 30, 2026",status:"pending",services:[{asset:"groupasset",title:"Group Assets received",time:"Oct 24 · 15:28",amount:"25 Group Assets"},{asset:"vipassets",title:"TimeOut-Slots completed",time:"Oct 24 · 16:02",amount:"10 VIP Assets"}]},
+  {id:"t3",agent:"Agent Mark",avatar:"👨🏽",date:"Oct 25, 2026",due:"Reviewed Oct 25",status:"reviewed",sentiment:"positive",tags:["Fast response","Answers questions thoroughly"],comment:"Great service, very helpful and friendly!",detailStatus:"added",services:[{asset:"diamond",title:"Diamonds received",time:"Oct 25 · 18:40",amount:"50 Diamonds"}]},
+  {id:"t4",agent:"Agent John",avatar:"👨🏻",date:"Oct 22, 2026",due:"Reviewed Oct 22",status:"reviewed",sentiment:"negative",tags:[],comment:"",detailStatus:"not_added",services:[{asset:"groupasset",title:"Group Assets claimed",time:"Oct 22 · 11:05",amount:"20 Group Assets"}]}
 ];
 const labels={negative:"Negative",positive:"Positive"};
 const sentimentAssets={negative:{selected:"sentiment-negative-selected.png",unselected:"sentiment-negative-unselected.png"},positive:{selected:"sentiment-positive-selected.png",unselected:"sentiment-positive-unselected.png"}};
@@ -151,84 +152,7 @@ let comment="";
 let anonymous=true;
 let language="EN";
 
-const translations={
-  PH:{
-    "AGENT SERVICES IN THE LAST 7 DAYS":"MGA SERBISYO NG AHENTE SA NAKARAANG 7 ARAW",
-    "You can rate completed agent services within 7 days of completion.":"Maaari mong i-rate ang nakumpletong serbisyo ng ahente sa loob ng 7 araw matapos itong makumpleto.",
-    "Your satisfaction rating is saved. Add optional context below.":"Naka-save na ang rating ng iyong kasiyahan. Magdagdag ng opsyonal na detalye sa ibaba.",
-    "Choose one option, then add details only if they help.":"Pumili ng isang opsyon, saka magdagdag ng detalye kung makatutulong.",
-    "This completed service is attached to the feedback task.":"Ang nakumpletong serbisyong ito ay naka-ugnay sa iyong feedback.",
-    "Agents cannot see your identity while this is on.":"Hindi makikita ng ahente ang iyong pagkakakilanlan habang naka-on ito.",
-    "Your identity will not be shared with the agent.":"Hindi ibabahagi sa ahente ang iyong pagkakakilanlan.",
-    "Your identity will be shared with the agent.":"Ibabahagi sa ahente ang iyong pagkakakilanlan.",
-    "Feedback submitted for this agent service.":"Naipasa ang feedback para sa serbisyong ito ng ahente.",
-    "Ratings you submit will appear here.":"Lalabas dito ang mga ipinasang rating.",
-    "You have no services waiting for a rating.":"Wala kang serbisyong naghihintay ng rating.",
-    "Satisfaction rating submitted":"Naipasa ang rating ng kasiyahan",
-    "Submitted with identity":"Isinumite kasama ang pagkakakilanlan",
-    "Submitted anonymously":"Isinumite nang hindi nagpapakilala",
-    "No additional tags submitted.":"Walang karagdagang tag na isinumite.",
-    "Share details about your experience...":"Ibahagi ang detalye ng iyong karanasan...",
-    "Choose any tags that describe the service.":"Piliin ang mga tag na naglalarawan sa serbisyo.",
-    "Diamond used for Timeout-Slots":"Diamond na ginamit para sa Timeout-Slots",
-    "Answers questions thoroughly":"Masusing sumasagot sa mga tanong",
-    "Additional processing fees":"Karagdagang bayarin sa pagproseso",
-    "Service Rating":"Rating ng Serbisyo",
-    "Help us improve agent service.":"Tulungan kaming mapabuti ang serbisyo ng ahente.",
-    "Rate your experience":"I-rate ang iyong karanasan",
-    "Recent rating":"Mga kamakailang rating",
-    "To rate (":"Ire-rate (",
-    "Rated (":"Na-rate (",
-    "Rate now":"I-rate ngayon",
-    "View rating":"Tingnan ang rating",
-    "Add details":"Magdagdag ng detalye",
-    "Details added":"Naidagdag ang detalye",
-    "Details not added":"Walang idinagdag na detalye",
-    "No ratings yet":"Wala pang rating",
-    "All caught up":"Kumpleto na",
-    "Save details":"I-save ang detalye",
-    "Submit Rating":"Isumite ang rating",
-    "Submit anonymously":"Magsumite nang hindi nagpapakilala",
-    "Rate service":"I-rate ang serbisyo",
-    "Service included":"Kasamang serbisyo",
-    "How was your experience?":"Kumusta ang iyong karanasan?",
-    "Feedback tags":"Mga tag ng feedback",
-    "Tell us more":"Magbahagi pa",
-    "Review details":"Mga detalye ng rating",
-    "Completed service":"Nakumpletong serbisyo",
-    "Your review":"Iyong rating",
-    "Your comment":"Iyong komento",
-    "No written comment submitted.":"Walang naisumiteng komento.",
-    "Rating submitted.":"Naipasa ang rating.",
-    "Feedback details saved.":"Na-save ang mga detalye ng feedback.",
-    "Return to game requested.":"Hiniling ang pagbabalik sa laro.",
-    "Service attitude":"Pag-uugali sa serbisyo",
-    "Response time":"Oras ng pagtugon",
-    "Abusive language":"Mapang-abusong pananalita",
-    "Refuses to communicate":"Tumangging makipag-usap",
-    "Delayed reply":"Naantalang tugon",
-    "Delayed top-up":"Naantalang top-up",
-    "Delayed redemption":"Naantalang redemption",
-    "Polite and patient":"Magalang at matiyaga",
-    "Fast response":"Mabilis na tugon",
-    "Fast top-up":"Mabilis na top-up",
-    "Fast redemption":"Mabilis na redemption",
-    "VIP Assets received":"Natanggap ang VIP Assets",
-    "Group Assets received":"Natanggap ang Group Assets",
-    "Diamond received":"Natanggap ang Diamond",
-    "Diamond used":"Ginamit na Diamond",
-    "Pending":"Naghihintay",
-    "Negative":"Negatibo",
-    "Positive":"Positibo",
-    "(Optional)":"(Opsyonal)",
-    "Cancel":"Kanselahin",
-    "Back":"Bumalik",
-    "Done":"Tapos",
-    "Oct":"Okt",
-    "Nov":"Nob"
-  }
-};
-
+const translations=(function(config){const english=config.EN||{};return Object.keys(config).reduce(function(result,locale){result[locale]=Object.keys(english).reduce(function(dictionary,key){const source=english[key];const target=(config[locale]||{})[key];if(source&&target&&source!==target){dictionary[source]=target}return dictionary},{});return result}, {})})(window.serviceRatingTranslationConfig||{});
 function escapeHtml(value){return String(value||"").replace(/[&<>"']/g,function(character){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[character]})}
 function translateText(value){const dictionary=translations[language];if(!dictionary)return String(value);return Object.keys(dictionary).sort(function(left,right){return right.length-left.length}).reduce(function(output,source){return output.split(source).join(dictionary[source])},String(value))}
 function activeTask(){return tasks.find(function(task){return task.id===activeId})||tasks[0]}
@@ -244,7 +168,7 @@ function submittedRatingSummary(sentiment,anonymityLabel){const face='<img src="
 function tagGroupMarkup(groups,sentiment){if(!sentiment)return '<p class="sectionHelp">Select satisfaction to reveal tags.</p>';return '<div class="tagGroups">'+[{title:"Service attitude",tags:groups.attitude},{title:"Response time",tags:groups.responseTime}].map(function(group){return '<div class="tagGroup"><div class="tagGroupTitle">'+group.title+'</div><div class="tagGrid">'+group.tags.map(function(tag){return '<button class="tag '+(selectedTags.includes(tag)?"selected":"")+'" onclick="toggleTag(\''+escapeHtml(tag)+'\')">'+(selectedTags.includes(tag)?"✓ ":"")+escapeHtml(tag)+"</button>"}).join("")+'</div></div>'}).join("")+"</div>"}
 function formPage(){const task=activeTask();const adding=task.status==="reviewed";const sentiment=adding?task.sentiment:selectedSentiment;const groups=tagSets[sentiment];const actionLabel=adding?"Save details":"Submit Rating";const anonymityLabel=task.anonymous===false?"Submitted with identity":"Submitted anonymously";const anonymousControl=adding?"":'<button class="anonymousControl" type="button" role="switch" aria-checked="'+(anonymous?"true":"false")+'" onclick="toggleAnonymous()"><span class="anonymousCopy"><strong>Submit anonymously</strong><span>Agents cannot see your identity while this is on.</span></span><span class="anonymousSwitch '+(anonymous?"on":"")+'" aria-hidden="true"></span></button>';const anonymousFooter=adding?"":'<p class="anonymousFooter">'+(anonymous?"Your identity will not be shared with the agent.":"Your identity will be shared with the agent.")+'</p>';const ratingContent=adding?submittedRatingSummary(sentiment,anonymityLabel):sentimentCards(sentiment,false);return '<div class="shell">'+topbar(adding?"Add details":"Rate service",true)+'<main class="scrollArea"><div class="detailPage"><div class="agentBlock"><div class="avatar">'+task.avatar+'</div><div><div class="agentName">'+escapeHtml(task.agent)+'</div><div class="agentDetail">'+escapeHtml(task.date)+'</div></div></div><section class="section"><div class="sectionTitle">Service included</div><p class="sectionHelp">This completed service is attached to the feedback task.</p>'+services(task,false)+'</section><section class="formIntro"><h1>How was your experience?</h1><p class="subtext">'+(adding?"Your satisfaction rating is saved. Add optional context below.":"Choose one option, then add details only if they help.")+'</p></section>'+anonymousControl+ratingContent+'<section class="section"><div class="sectionTitle">Feedback tags <span class="sectionHelp">(Optional)</span></div><p class="sectionHelp">Choose any tags that describe the service.</p>'+tagGroupMarkup(groups,sentiment)+'</section><section class="section"><label class="sectionTitle" for="comment">Tell us more <span class="sectionHelp">(Optional)</span></label><textarea id="comment" class="textarea" maxlength="200" placeholder="Share details about your experience..." oninput="comment=this.value;updateCounter()">'+escapeHtml(comment)+'</textarea><div class="counter" id="counter">'+comment.length+'/200</div></section></div></main><footer class="footerActions">'+anonymousFooter+'<div class="footerActionButtons"><button class="secondary" onclick="goList()">Cancel</button><button class="primary" '+(!adding&&!sentiment?"disabled":"")+' onclick="'+(adding?"saveDetails()":"submitReview()")+'">'+actionLabel+'</button></div></footer></div>'}
 function reviewPage(){const task=activeTask();const sentiment=task.sentiment||"positive";const face='<img src="'+sentimentAssets[sentiment].unselected+'" alt="">';const anonymityLabel=task.anonymous===false?"Submitted with identity":"Submitted anonymously";return '<div class="shell">'+topbar("Review details",true)+'<main class="scrollArea"><div class="detailPage"><div class="agentBlock"><div class="avatar">'+task.avatar+'</div><div><div class="agentName">'+escapeHtml(task.agent)+'</div><div class="agentDetail">'+escapeHtml(task.date)+'<br>Completed service</div></div></div><section class="reviewBlock"><strong>Service included</strong><div style="margin-top:9px">'+services(task,true)+'</div></section><section class="formIntro"><h1>Your review</h1><p class="subtext">Feedback submitted for this agent service.</p></section><div class="reviewSummary"><div class="reviewResult"><div class="reviewFace">'+face+'</div><div><strong>'+labels[sentiment]+'</strong><span>Satisfaction rating submitted<br><b class="anonymousReview">'+anonymityLabel+'</b></span></div></div></div><section class="reviewBlock"><strong>Feedback tags</strong><div class="tagGrid" style="margin-top:9px">'+(task.tags&&task.tags.length?task.tags.map(function(tag){return '<span class="tag selected" style="display:inline-grid;place-items:center">✓ '+escapeHtml(tag)+"</span>"}).join(""):'<span class="sectionHelp">No additional tags submitted.</span>')+'</div></section><section class="reviewBlock"><strong>Your comment</strong><div class="commentBox">'+(task.comment?escapeHtml(task.comment):"No written comment submitted.")+'</div></section></div></main><footer class="footerActions"><div class="footerActionButtons"><button class="secondary" onclick="goList()">Back</button>'+((task.detailStatus!=="added")?'<button class="primary" onclick="openRating(\''+task.id+'\')">Add details</button>':'<button class="primary" onclick="goList()">Done</button>')+'</div></footer></div>'}
-function render(){const root=document.getElementById("app");const markup=view==="form"?formPage():view==="review"?reviewPage():listPage(view==="reviewed");root.innerHTML=translateText(markup);if(document.documentElement){document.documentElement.lang=language==="PH"?"fil":"en"}if("title" in document){document.title=language==="PH"?"Rating ng Serbisyo · Portrait Prototype":"Service Rating · Portrait Prototype"}}
+function render(){const root=document.getElementById("app");const markup=view==="form"?formPage():view==="review"?reviewPage():listPage(view==="reviewed");root.innerHTML=translateText(markup);if(document.documentElement){document.documentElement.lang=language==="PH"?"fil":"en"}if("title" in document){document.title=language==="PH"?"Rating ng Serbisyo · Tongits Go":"Service Rating · Tongits Go"}}
 function renderPreservingScroll(){const scrollArea=document.querySelector(".scrollArea");const scrollTop=scrollArea?scrollArea.scrollTop:0;render();const updatedScrollArea=document.querySelector(".scrollArea");if(updatedScrollArea){updatedScrollArea.scrollTop=scrollTop;requestAnimationFrame(function(){updatedScrollArea.scrollTop=scrollTop})}}
 function showList(reviewed){view=reviewed?"reviewed":"pending";render()}
 function setLanguage(value){if(value!=="EN"&&value!=="PH")return;language=value;render()}
